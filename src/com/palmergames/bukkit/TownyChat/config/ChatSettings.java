@@ -5,6 +5,8 @@ import com.palmergames.bukkit.TownyChat.util.FileMgmt;
 import com.palmergames.bukkit.config.ConfigNodes;
 import com.palmergames.bukkit.towny.TownyUniverse;
 import com.palmergames.bukkit.towny.object.TownyWorld;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.util.Colors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -295,7 +297,7 @@ public class ChatSettings extends tag_formats {
 
 class tag_formats extends chat_colours{
 
-	private static String WorldTag, TownTag, NationTag, BothTags;
+	private static String WorldTag, TownTag, NeutralTownTag, NationTag, OccupyingNationTag, BothTags;
 
 	/**
 	 * @return the World tag
@@ -315,7 +317,11 @@ class tag_formats extends chat_colours{
 	 * @return the TownTag
 	 */
 	public static String getTownTag() {
-		return TownTag;
+		if(resident.getTown().isNeutral()) {
+			return NeutralTownTag;
+		} else {
+			return TownTag;
+		}
 	}
 
 	/**
@@ -323,13 +329,18 @@ class tag_formats extends chat_colours{
 	 */
 	public static void setTownTag(String tag) {
 		tag_formats.TownTag = tag;
+		tag_formats.NeutralTownTag = tag + Colors.CYAN + "*";
 	}
 
 	/**
 	 * @return NationTag
 	 */
-	public static String getNationTag() {
-		return NationTag;
+	public static String getNationTag(Resident resident) {
+		if(resident.getTown().isOccupied()) {
+			return OccupyingNationTag;
+		} else {
+			return NationTag;
+		}
 	}
 
 	/**
@@ -337,6 +348,7 @@ class tag_formats extends chat_colours{
 	 */
 	public static void setNationTag(String tag) {
 		tag_formats.NationTag = tag;
+		tag_formats.OccupyingNationTag = tag + Colors.RED + "*";
 	}
 
 	/**
